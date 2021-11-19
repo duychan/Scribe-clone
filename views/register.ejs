@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="/register" method="post">
+        <label for="">
+      <p>Email:</p>
+      <input type="text" place="Email" name="email" />
+    </label>
+
+        <label for="">
+      <p>Password:</p>
+      <input type="text" place="Password" name="Password" />
+    </label>
+
+        <label for="">
+      <p>rePassword:</p>
+      <input type="text" place="rePassword" name="rePassword" />
+    </label>
+        <br />
+        <br />
+        <p style="color: red;">
+            <%= error_mess %>
+        </p>
+        <br />
+        <button type="submit">Register</button>
+        <input type="button" value="Cancel">
+    </form>
+</body>
+
+</html>
