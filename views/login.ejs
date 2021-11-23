@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=, initial-scale=1.0" />
+    <title>Login</title>
+</head>
+
+<body>
+    <h1>Login</h1>
+    <form action="/login" method="post">
+        <label for="">
+      <p>Email:</p>
+      <input type="text" place="Email" name="email" />
+    </label>
+
+        <label for="">
+      <p>Password:</p>
+      <input type="text" place="Password" name="password" />
+    </label>
+        <br />
+        <br />
+        <p style="color: red;">
+            <%= error_mess %>
+        </p>
+        <br />
+        <button type="submit">Login</button>
+        <input type="button" value="Cancel" onclick="">
+    </form>
+</body>
+
+</html>
