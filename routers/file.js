@@ -8,4 +8,5 @@ router.route("").post(medias.single("avatar"), function(req, res) {
 });
 
 // config uploads file
+
 module.exports = router;

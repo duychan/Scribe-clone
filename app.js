@@ -1,7 +1,5 @@
 const express = require('express');
 const app = express(); // config server
-const routerConfig = require("./routers"); // import external file 
-const fileRouter = require("./routers/file");
 const path = require("path");
 const flash = require("connect-flash");
 const db = require("./configs/db"); // connect db
@@ -9,6 +7,9 @@ db.connectDB(); // connect db
 const session = require('express-session');
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+
+const routerConfig = require("./routers"); // import external file 
+const fileRouter = require("./routers/file");
 
 // set view engine
 app.set("views", path.join(__dirname, "views"));

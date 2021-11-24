@@ -3,6 +3,7 @@ const router = express.Router();
 const { shower, register, login } = require("../controllers/public.js");
 const { User } = require('../models/user.js');
 
+
 router.route("/").get(shower);
 
 router.route("/register").get(register)
