@@ -5,18 +5,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>home</title>
 </head>
 
 <body>
     <h1>Home page</h1>
-    <form action="upload" method="post" enctype="multipart/form-data">
+    <h2>
+        <%=user.email%>
+    </h2> <br>
+    <h2>
+        <%=user.displayName%>
+    </h2>
+    <form action="/update/name" method="post">
+        <!-- enctype="multipart/form-data" -->
         Avatar:
         <input type="file" name="avatar">
         <br>
         <label for="displayname">
             <span>Display Name:</span>
-            <input type="text" placeholder="Please input your name">
+            <input type="text" name="displayName" placeholder="Please input your name">
         </label>
         <button type="submit">Submit</button>
     </form>

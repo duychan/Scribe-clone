@@ -11,9 +11,15 @@ const login = function(req, res) {
 const upload = function(req, res) {
     res.render("a");
 };
+const home = (req, res, next) => {
+    res.render("home", {
+        user: req.flash("user")[0],
+    });
+};
 module.exports = {
     shower,
     register,
     login,
     upload,
+    home,
 };

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { shower, register, login } = require("../controllers/public.js");
+const { shower, register, login, home } = require("../controllers/public.js");
 const { User } = require('../models/user.js');
-
+const { isLoggedIn } = require("../middleware/auth");
 
 router.route("/").get(shower);
 
@@ -45,16 +45,24 @@ router.route("/login").get(login)
                 // console.log("Email, Password, rePassword are required !");
                 return false;
             }
-            const user = await User.findOne({ email, password });
+            const user = await User.findOne({ email, password }).lean();
+
             if (!user) {
                 req.flash("error", "Email or Password is incorrect");
                 console.log("false");
                 res.redirect("login");
                 return false;
             }
-            res.render("home");
+            delete user.password;
+            delete user.__v;
+
+            req.session.user = user;
+            req.flash("user", req.session.user);
+            res.redirect("home");
         } catch (error) {
             next(error);
         }
     });
+
+router.route("/home").get(isLoggedIn, home);
 module.exports = router;

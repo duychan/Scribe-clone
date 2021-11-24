@@ -8,8 +8,9 @@ const session = require('express-session');
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
-const routerConfig = require("./routers"); // import external file 
+const routerConfig = require("./routers/index"); // import external file 
 const fileRouter = require("./routers/file");
+const userRouter = require("./routers/user");
 
 // set view engine
 app.set("views", path.join(__dirname, "views"));
@@ -35,6 +36,8 @@ app.use(function(req, res, next) {
 })
 app.use("/", routerConfig); // need a router
 app.use("/upload", fileRouter);
+app.use("/update", userRouter);
+
 // handle error
 app.use(function(req, res, next) {
     next();
