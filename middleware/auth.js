@@ -5,7 +5,6 @@ const isLoggedIn = function(req, res, next) {
         next();
     } else {
         res.redirect("/login");
-        console.log("null session");
     }
 };
 module.exports = {

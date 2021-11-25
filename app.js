@@ -11,6 +11,7 @@ const logger = require("morgan");
 const routerConfig = require("./routers/index"); // import external file 
 const fileRouter = require("./routers/file");
 const userRouter = require("./routers/user");
+const roomRouter = require("./routers/rooms");
 
 // set view engine
 app.set("views", path.join(__dirname, "views"));
@@ -36,6 +37,7 @@ app.use(function(req, res, next) {
 })
 app.use("/", routerConfig); // need a router
 app.use("/upload", fileRouter);
+app.use("/rooms", roomRouter);
 app.use("/update", userRouter);
 
 // handle error

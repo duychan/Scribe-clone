@@ -16,10 +16,14 @@ const home = (req, res, next) => {
         user: req.flash("user")[0],
     });
 };
+const room = (req, res, next) => {
+    res.render("room");
+}
 module.exports = {
     shower,
     register,
     login,
     upload,
     home,
+    room,
 };
