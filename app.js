@@ -17,7 +17,44 @@ const roomRouter = require("./routers/rooms");
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.use(logger());
+app.use(express.static(__dirname + "/assets"));
+app.use(express.static(__dirname + "/node_modules/socket.io/client-dist"));
+
+app.use(logger);
+
+// create way connect to webSocket
+
+const cors = require('cors');
+const socket = require("socket.io");
+const http = require("http");
+const server = http.createServer(app);
+const io = socket(server, {
+    cors: {
+        methods: ['get', 'post'],
+        origin: '*'
+    }
+});
+
+// another way to connect init socketServer
+
+// const http = require('http')
+// const server = http.createServer(app)
+// const { Server } = require('socket.io')
+// const io = new Server(server, {
+//     cors: {
+//         methods: ['get', 'post'],
+//         origin: '*'
+//     }
+// });
+server.listen(1234, () => {
+    console.log('port 1234');
+});
+
+
+io.on('connection', (socket) => {
+    console.log('user connected', socket.id);
+});
+
 // parser body
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

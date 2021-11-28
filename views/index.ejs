@@ -5,12 +5,36 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <title>
+        <%=title%>
+    </title>
 </head>
 
 <body>
-    <h1>index </h1>
-    <span>!!</span>
+    <main class="flex">
+        <section id="player"></section>
+        <section id="drawer">
+            <canvas id="workspace"></canvas>
+            <div class="tools">
+                <div class="color" style="background-color: blue;"></div>
+                <div class="color" style="background-color: green;"></div>
+                <div class="color" style="background-color: red;"></div>
+                <input type="color" />
+                <input type="range" class="size-pen" name="" id="" min="1" max="20">
+                <input type="button" class="button-undo" value="Undo">
+                <input type="button" class="button-clear" value="Clear">
+            </div>
+
+        </section>
+    </main>
 </body>
+
+<script src="/socket.io.js"></script>
+<script src="/socket.io.min.js"></script>
+<script src="main.js"></script>
+<script>
+    const socket = io('http://localhost:1234');
+</script>
 
 </html>

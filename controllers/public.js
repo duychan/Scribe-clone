@@ -1,6 +1,8 @@
 const shower = function(req, res) {
     //console.log('home page');
-    res.render("index");
+    res.render("index", {
+        title: "play"
+    });
 };
 const register = function(req, res) {
     res.render("register");

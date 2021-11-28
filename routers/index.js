@@ -3,7 +3,6 @@ const router = express.Router();
 const { shower, register, login, home } = require("../controllers/public.js");
 const { User } = require('../models/user.js');
 const { isLoggedIn } = require("../middleware/auth");
-
 router.route("/").get(shower);
 
 router.route("/register").get(register)
