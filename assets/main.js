@@ -1,4 +1,14 @@
 const canvas = document.querySelector("#workspace");
+const socket = io('http://localhost:1234');
+
+const test = document.querySelector('.test');
+
+
+let socketId = null;
+
+socket.on('setInstanceId', res => {
+    socketId = res.id;
+});
 
 canvas.width = 600;
 canvas.height = 400;
@@ -23,17 +33,33 @@ function start(e) {
     isDrawing = true;
     ctx.beginPath();
     ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    const x = e.clientX - canvas.offsetLeft;
+    const y = e.clientY - canvas.offsetTop;
+    socket.emit('startDraw', {
+        isDrawing: true,
+        x,
+        y
+    });
     e.preventDefault();
 }
 
 function draw(e) {
     if (isDrawing) {
         ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        const x = e.clientX - canvas.offsetLeft;
+        const y = e.clientY - canvas.offsetTop;
         ctx.lineWidth = drawWidth;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
         ctx.stroke();
         ctx.strokeStyle = drawColor;
+        socket.emit('Drawing', {
+            isDrawing: true,
+            x,
+            y,
+            drawColor,
+            drawWidth
+        });
     }
     e.preventDefault();
 }
@@ -41,10 +67,14 @@ function draw(e) {
 function end(e) {
     if (isDrawing) {
         ctx.closePath();
+        indexDraw += 1;
+        arrImg.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
         isDrawing = false;
+        socket.emit('stopDraw', {
+            isDrawing,
+            indexDraw,
+        })
     }
-    indexDraw += 1;
-    arrImg.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
     e.preventDefault();
 }
 
@@ -89,6 +119,74 @@ function undo() {
     if (indexDraw > 0) {
         arrImg.pop();
         indexDraw -= 1;
-        ctx.putImageData(arrImg[indexDraw], 0, 0);
+        const image = arrImg[indexDraw];
+        ctx.putImageData(image, 0, 0);
+        console.log(`1${image}`);
+        socket.emit('undo', {
+            indexDraw,
+            image,
+        })
+    } else {
+        clear();
     }
 }
+
+
+socket.on('sendDrawStart', (res) => {
+    ctx.beginPath();
+    ctx.moveTo(res.x, res.y);
+});
+
+socket.on('sendDrawing', (res) => {
+    if (res.isDrawing && res.id !== socketId) {
+        ctx.lineTo(res.x, res.y);
+        ctx.lineWidth = res.drawWidth;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.stroke();
+        ctx.strokeStyle = res.drawColor;
+    }
+});
+socket.on('stopFromServer', (res) => {
+    if (res.isDrawing) {
+        ctx.closePath();
+        res.isDrawing = false;
+    }
+});
+
+const text = document.querySelector('.text-answer');
+const btnSend = document.querySelector('.button-send');
+const chatWraper = document.querySelector('.chat-wraper');
+
+
+btnSend.addEventListener('click', (e) => {
+    socket.emit('message', {
+        message: text.value
+    });
+    text.value = '';
+    e.preventDefault();
+});
+text.addEventListener('keyup', (e) => {
+    if (e.key == 'Enter') {
+        socket.emit('message', {
+            message: text.value
+        });
+        text.value = '';
+    }
+    e.preventDefault();
+})
+socket.on('messFromServer', (res) => {
+    const Item = document.createElement('p');
+    const nameItem = document.createElement('span');
+    nameItem.style.fontWeight = 500;
+    const messItem = document.createElement('span');
+    nameItem.textContent = `${res.id}: `;
+    messItem.textContent = res.message;
+    Item.appendChild(spanItem);
+    Item.appendChild(messItem);
+    chatWraper.appendChild(Item);
+});
+const xemid = document.querySelector('.xemid');
+socket.on('messFromServer', res => {
+    xemid.innerText = socketId;
+})

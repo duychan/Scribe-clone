@@ -20,7 +20,7 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/assets"));
 app.use(express.static(__dirname + "/node_modules/socket.io/client-dist"));
 
-app.use(logger);
+app.use(logger(':method :url :status :res[content-length] - :response-time ms'));
 
 // create way connect to webSocket
 
@@ -34,6 +34,7 @@ const io = socket(server, {
         origin: '*'
     }
 });
+
 
 // another way to connect init socketServer
 
@@ -52,7 +53,23 @@ server.listen(1234, () => {
 
 
 io.on('connection', (socket) => {
-    console.log('user connected', socket.id);
+    //console.log(` connected socketId: `, socket.id);
+    socket.emit('setInstanceId', { id: socket.id });
+    socket.on('startDraw', (res) => {
+        io.emit('sendDrawStart', {...res, id: socket.id });
+    });
+    socket.on("Drawing", (res) => {
+        io.emit('sendDrawing', {...res, id: socket.id });
+    });
+    socket.on('stopDraw', (res) => {
+        io.emit('stopFromServer', res);
+    });
+    socket.on('message', (res) => {
+        io.emit('messFromServer', {...res, id: socket.id });
+    });
+    // socket.on("undo", (res) => {
+    //     io.emit('undoFromServer', res);
+    // });
 });
 
 // parser body

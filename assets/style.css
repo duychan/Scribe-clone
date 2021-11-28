@@ -18,3 +18,15 @@ body {
     border: 2px solid #000;
     display: inline-block;
 }
+
+.chat-wraper {
+    background-color: antiquewhite;
+    margin-left: 10px;
+    height: 400px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.text-answer {
+    height: 30px
+}
