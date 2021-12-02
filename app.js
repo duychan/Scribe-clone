@@ -67,6 +67,11 @@ io.on('connection', (socket) => {
     socket.on('message', (res) => {
         io.emit('messFromServer', {...res, id: socket.id });
     });
+    socket.on('clear', res => {
+        io.emit('clearFromServer', {
+            res
+        });
+    });
     // socket.on("undo", (res) => {
     //     io.emit('undoFromServer', res);
     // });

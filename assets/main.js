@@ -3,11 +3,13 @@ const socket = io('http://localhost:1234');
 
 const test = document.querySelector('.test');
 
+const xemid = document.querySelector('.xemid');
 
 let socketId = null;
 
 socket.on('setInstanceId', res => {
     socketId = res.id;
+    xemid.innerText = socketId;
 });
 
 canvas.width = 600;
@@ -88,6 +90,10 @@ function clear() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     drawColor = "black";
+    socket.emit('clear', {
+        backgroundColor,
+        drawColor
+    });
 }
 
 // get color for 
@@ -153,6 +159,12 @@ socket.on('stopFromServer', (res) => {
         res.isDrawing = false;
     }
 });
+socket.on('clearFromServer', res => {
+    ctx.fillStyle = res.backgroundColor;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    drawColor = res.drawColor;
+});
 
 const text = document.querySelector('.text-answer');
 const btnSend = document.querySelector('.button-send');
@@ -180,13 +192,9 @@ socket.on('messFromServer', (res) => {
     const nameItem = document.createElement('span');
     nameItem.style.fontWeight = 500;
     const messItem = document.createElement('span');
-    nameItem.textContent = `${res.id}: `;
-    messItem.textContent = res.message;
-    Item.appendChild(spanItem);
+    nameItem.innerText = `${res.id}: `;
+    messItem.innerText = res.message;
+    Item.appendChild(nameItem);
     Item.appendChild(messItem);
     chatWraper.appendChild(Item);
 });
-const xemid = document.querySelector('.xemid');
-socket.on('messFromServer', res => {
-    xemid.innerText = socketId;
-})
