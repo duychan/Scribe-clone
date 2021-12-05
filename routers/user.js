@@ -13,8 +13,10 @@ router.route("/name").get(isLoggedIn).post(async(req, res, next) => {
     await userFounded.save();
     req.session.user = userFounded;
     req.flash("user", req.session.user);
-    res.render("home", {
-        user: req.flash("user")[0],
-    });
+    res.redirect('/home');
+    // next();
+    // res.render("home", {
+    //     user: req.flash("user")[0],
+    // });
 });
 module.exports = router;
