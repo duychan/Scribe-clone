@@ -24,17 +24,23 @@ app.use(logger(':method :url :status :res[content-length] - :response-time ms'))
 
 // create way connect to webSocket
 
-const cors = require('cors');
-const socket = require("socket.io");
+// const cors = require('cors');
+// const socket = require("socket.io");
+// const http = require("http");
+// const server = http.createServer(app);
+// const io = socket(server, {
+//     cors: {
+//         methods: ['get', 'post'],
+//         origin: '*'
+//     }
+// });
+
+// another
+
+const { Server } = require("socket.io");
 const http = require("http");
 const server = http.createServer(app);
-const io = socket(server, {
-    cors: {
-        methods: ['get', 'post'],
-        origin: '*'
-    }
-});
-
+const io = new Server(server);
 
 // another way to connect init socketServer
 
@@ -47,9 +53,8 @@ const io = socket(server, {
 //         origin: '*'
 //     }
 // });
-server.listen(1234, () => {
-    console.log('port 1234');
-});
+//
+
 
 
 io.on('connection', (socket) => {
@@ -107,5 +112,7 @@ app.use(function(error, req, res, next) {
     console.log(error);
     res.render("error");
 });
-
+server.listen(1234, () => {
+    console.log('port 1234');
+});
 module.exports = app;

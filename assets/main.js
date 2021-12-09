@@ -1,5 +1,5 @@
 const canvas = document.querySelector("#workspace");
-const socket = io('http://localhost:1234');
+const socket = io();
 
 const test = document.querySelector('.test');
 
@@ -19,6 +19,7 @@ let backgroundColor = "white";
 let isDrawing = false;
 let drawWidth = 10;
 let drawColor = "black";
+let drawColor1 = document.querySelector('.multicolor');
 let arrImg = [];
 let indexDraw = -1;
 
@@ -34,9 +35,10 @@ canvas.addEventListener("mouseover", end, false);
 function start(e) {
     isDrawing = true;
     ctx.beginPath();
-    ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
-    const x = e.clientX - canvas.offsetLeft;
-    const y = e.clientY - canvas.offsetTop;
+    ctx.moveTo(e.pageX - canvas.offsetLeft, e.pageY - canvas.offsetTop);
+    console.log(e.pageX, e.pageY);
+    const x = e.pageX - canvas.offsetLeft;
+    const y = e.pageY - canvas.offsetTop;
     socket.emit('startDraw', {
         isDrawing: true,
         x,
@@ -47,19 +49,22 @@ function start(e) {
 
 function draw(e) {
     if (isDrawing) {
-        ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
-        const x = e.clientX - canvas.offsetLeft;
-        const y = e.clientY - canvas.offsetTop;
+        ctx.lineTo(e.pageX - canvas.offsetLeft, e.pageY - canvas.offsetTop);
+        const x = e.pageX - canvas.offsetLeft;
+        const y = e.pageY - canvas.offsetTop;
         ctx.lineWidth = drawWidth;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
         ctx.stroke();
         ctx.strokeStyle = drawColor;
+        ctx.strokeStyle = drawColor1.value;
+
         socket.emit('Drawing', {
             isDrawing: true,
             x,
             y,
             drawColor,
+            drawColor1,
             drawWidth
         });
     }
@@ -105,6 +110,7 @@ changeColor.forEach(element => {
 
 function switchColor(event) {
     drawColor = event.target.style.backgroundColor;
+    drawColor1 = drawColor;
 }
 
 // change size pen to draw
